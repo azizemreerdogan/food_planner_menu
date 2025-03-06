@@ -2,13 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:food_planner_menu/config/config.dart';
 import 'package:food_planner_menu/models/food.dart';
 import 'package:http/http.dart' as http;
 
 class FoodsDatabaseApi {
   static Future<List<Food>> fetchFoods() async {
     try{
-      const String url = "http://10.0.2.2:8080/api/foods";
+      const String url = Config.apiUrl;
       final response = await http.get(Uri.parse(url)); 
       
       if(response.statusCode == 200){
