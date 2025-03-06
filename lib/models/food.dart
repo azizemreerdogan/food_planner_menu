@@ -5,6 +5,9 @@ class Food {
   String? instructions;
   String? imageUrl;
   List<String>? ingredients;
+  String? dayName;
+  String? mealTime;
+  
   
   Food({
     this.id,
@@ -13,6 +16,17 @@ class Food {
     this.instructions,
     this.imageUrl,
     this.ingredients,
+  });
+  
+  Food.withMealTime({
+    this.id,
+    this.name,
+    this.area,
+    this.instructions,
+    this.imageUrl,
+    this.ingredients,
+    this.dayName,
+    this.mealTime,
   });
   
   factory Food.fromJson(Map<String, dynamic> json) {
@@ -26,6 +40,18 @@ class Food {
         final ingredient = json['strIngredient${index + 1}'] ?? '';
         return ingredient.isNotEmpty ? ingredient : null;
       }).whereType<String>().toList(),
+    );
+  }
+  
+  factory Food.fromJsonForSpring(Map<String, dynamic> json) {
+    return Food.withMealTime(
+      id: json['id'] ?? 0,
+      name: json['name'] ?? 'Unknown Name',
+      area: json['area'] ?? 'Unknown',
+      instructions: json['instructions'] ?? 'No instructions available',
+      imageUrl: json['imageUrl'] ?? 'no image',
+      dayName: json['dayName'] ?? 'Unknown',
+      mealTime: json['foodTypeName'] ?? 'Unknown',
     );
   }
   
