@@ -10,7 +10,7 @@ class FoodsApi {
       final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
-        debugPrint("Response: ${response.body}");
+        //debugPrint("Response: ${response.body}");
         // Process the response
         Map<String, dynamic> data = json.decode(response.body);
         final List<dynamic> meals = data['meals'];

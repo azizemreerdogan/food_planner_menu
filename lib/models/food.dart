@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart';
+
 class Food {
   int? id;
   String? name;
@@ -29,12 +31,23 @@ class Food {
     this.mealTime,
   });
   
+  Food.copyWithMealTime(Food food, String dayName, String mealTime){
+    id = food.id;
+    name = food.name;
+    area = food.area;
+    instructions = food.instructions;
+    imageUrl = food.imageUrl;
+    ingredients = food.ingredients;
+    this.dayName = dayName;
+    this.mealTime = mealTime;
+  }
+  
   factory Food.fromJson(Map<String, dynamic> json) {
     return Food(
       id: int.parse(json['idMeal']) ?? 0,
       name: json['strMeal'] ?? 'Unknown Name',
       area: json['strArea'] ?? 'Unknown',
-      instructions: json['strInstructions'] ?? 'No instructions available',
+      instructions: json['strInstructions'].toString().substring(1,25) ?? 'No instructions available',
       imageUrl: json['strMealThumb'] ?? 'no image',
       ingredients: List<String?>.generate(20, (index) {
         final ingredient = json['strIngredient${index + 1}'] ?? '';

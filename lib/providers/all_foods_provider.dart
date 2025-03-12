@@ -18,7 +18,8 @@ class AllFoodsProvider extends ChangeNotifier{
     notifyListeners();
   }
   
-  Future<void> addFood(Food food){
+  Future<void> addFood(Food food) async{
+    await FoodsDatabaseApi.addFood(food);
     selectedFood.add(food);
     notifyListeners();
     return Future.value();
@@ -26,6 +27,7 @@ class AllFoodsProvider extends ChangeNotifier{
   
   Future<void> fetchFoodsFromDatabase() async{
     List<Food> foods = await FoodsDatabaseApi.fetchFoods();
+    dbFoods.clear();
     dbFoods = foods.map((e) => e).toList();
     notifyListeners();
     return Future.value();

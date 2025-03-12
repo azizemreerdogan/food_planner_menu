@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:food_planner_menu/models/food.dart';
+import 'package:food_planner_menu/pages/home_page.dart';
 import 'package:food_planner_menu/providers/all_foods_provider.dart';
+import 'package:food_planner_menu/services/foods_api.dart';
 import 'package:provider/provider.dart';
 
 class AddFoodPage extends StatefulWidget {
@@ -87,7 +89,7 @@ class _AddFoodPageState extends State<AddFoodPage> {
                           onChanged: (value) async {
                             await allFoodsProvider.fetchFoods(value);
                             foodList = allFoodsProvider.allFoods;
-                            debugPrint("Foods: ${foodList.map((element) => element.name).join(', ')}");
+                            //debugPrint("Foods: ${foodList.map((element) => element.name).join(', ')}");
                           },
                           controller: _foodController,
                           decoration:  InputDecoration(
@@ -112,12 +114,33 @@ class _AddFoodPageState extends State<AddFoodPage> {
                             itemCount: foodList.isNotEmpty ? foodList.length : 0,
                             itemBuilder: (context, index) {
                               final food = foodList[index];
+                              
                               return ListTile(
                                 title: Text(food.name ?? 'No name'),
-                                
-                                onTap: () {
-                                  allFoodsProvider.addFood(food);
-                                  debugPrint("Selected foods: ${allFoodsProvider.selectedFood.map((element) => element.name).join(', ')}");
+                      
+                                onTap: () async {
+                                  var matchingDaysKeys = dayMapping.entries
+                                    .firstWhere((entry) => entry.value == widget.day, orElse: () => const MapEntry('', ''))
+                                    .key;
+                                    
+                                  
+                                  var matchingMealTimeKeys = mealTimeMapping.entries
+                                      .firstWhere((entry) => entry.value == widget.mealTime, orElse: () => const MapEntry('', ''))
+                                      .key;
+                                  /*Food selectedFood = Food.copyWithMealTime(food,
+                                  matchingDaysKeys, matchingMealTimeKeys);*/
+                                  food.dayName = matchingDaysKeys;
+                                  food.mealTime = matchingMealTimeKeys;
+                                  debugPrint("Sending Data: ${{
+                                    "name": food.name,
+                                    "area": food.area,
+                                    "instructions": food.instructions,
+                                    "imageUrl": food.imageUrl,
+                                    "dayName": food.dayName,
+                                    "foodTypeName": food.mealTime
+                                  }}");
+                                  await allFoodsProvider.addFood(food);
+                                  debugPrint("Selected foods: ${foodList.map((element) => element.name).join(', ')}");
                                   FocusScope.of(context).unfocus();
                                   foodList = [];
                                 },

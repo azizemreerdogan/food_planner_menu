@@ -16,12 +16,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    //init state to fetch data from database when initialization and widgets binding
-    //to fetch before the first frame is shown
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<AllFoodsProvider>(context, listen: false).fetchFoodsFromDatabase();
     });
   }
+
   
   @override
   Widget build(BuildContext context) {
@@ -161,17 +160,22 @@ class _HomePageState extends State<HomePage> {
                     Icons.add_circle_outline,
                     color: Colors.grey,
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => AddFoodPage(
-                          day: mealTime,
+                          day: day,
                           mealTime: mealTime,
                         ),
                       ),
                     );
+                    
+                    
+                    if (mounted) {
+                      Provider.of<AllFoodsProvider>(context, listen: false).fetchFoodsFromDatabase();
+                    }
                   },
                 ),
               ),
@@ -197,6 +201,6 @@ const Map<String, String> mealTimeMapping = {
   'Breakfast': 'KAHVALTI',
   'Lunch': 'ÖĞLE',
   'Snack': 'ATIŞTIRMALIK',
-  'Dinner': 'AKŞAM',
+  'Meal': 'AKŞAM',
   };
 
